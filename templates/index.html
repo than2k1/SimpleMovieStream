@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+    
+
+    <h1 style="text-align: center"> Video Livestreaming</h1>
+    <div>
+        <img src="" id="image1" width="50%">
+    </div>
+    <div>
+
+        <button id="play">PLAY</button>
+        <button id="pause">PAUSE</button>
+        <button id="stop">STOP</button>
+        
+    </div>
+</body>
+
+<script type="text/javascript">
+
+  function makeid(length) {
+     var result           = '';
+     var characters       = '0123456789';
+     var charactersLength = characters.length;
+     for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * 
+  charactersLength));
+     }
+     return result;
+  }
+  id = makeid(5)
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('connect' ,function()
+  {
+     socket.emit('check' ,{data: id})
+  });
+  socket.on('image', function(msg)
+  {  
+     //console.log(image)
+     const image_element=document.getElementById('image1');
+     image_element.src="data:image/jpeg;base64,"+msg;
+  });
+
+  $('#pause').on('click', () =>{
+     socket.emit('pause', {data: id})
+  })
+  $('#play').on('click', () =>{
+     socket.emit('play', {data: id})
+  })
+  $('#stop').on('click', () =>{
+     socket.emit('stop', {data: id})
+  })
+</script>
+</html>

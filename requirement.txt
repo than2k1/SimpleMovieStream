@@ -1,0 +1,6 @@
+flask_socketio
+cv2
+time
+json
+base64
+threading
